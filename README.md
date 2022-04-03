@@ -19,13 +19,13 @@ python -m pip install dist/cb85-*.whl
 
 ## Benchmark
 
-This library is between 2x to 10x faster depending on the size of the input
+This library is between 30x to 50x faster depending on the size of the input
 data. You can run these benchmarks yourself by running `make bench`:
 
 |             | CPython (usec) | `cb85` (usec) |
 |        ---: |           ---: |          ---: |
-| `b85encode` |           15.8 |          7.13 |
-| `b85decode` |           26.7 |          2.43 |
+| `b85encode` |           15.9 |         0.481 |
+| `b85decode` |           26.6 |         0.474 |
 
 ## Example
 

@@ -1,3 +1,5 @@
+import cython
+
 cdef unsigned char *ENCODE_B85 = [
     b'0', b'1', b'2', b'3', b'4', b'5', b'6', b'7', b'8', b'9',
     b'A', b'B', b'C', b'D', b'E', b'F', b'G', b'H', b'I', b'J',
@@ -11,25 +13,31 @@ cdef unsigned char *ENCODE_B85 = [
     b'|', b'}', b'~'
 ]
 
+@cython.cdivision(True)
 cpdef bytes b85encode(bytes x):
     cdef int sz = len(x)
-    cdef int padding = (-sz) % 4
+    cdef int padding = sz % 4
+    if padding > 0:
+        padding = 4 - padding
+
     cdef bytearray out = bytearray(5 * (sz + padding) // 4)
+    cdef unsigned char *z = x
+    cdef unsigned char *o = out
     cdef unsigned int acc
     cdef int j = 0
     cdef int i
 
     for i in range(0, len(x), 4):
-        acc = (x[i+0] << 24) \
-            | ((x[i+1] if i+1 < sz else 0) << 16) \
-            | ((x[i+2] if i+2 < sz else 0) << 8) \
-            | (x[i+3] if i+3 < sz else 0);
+        acc = (z[i+0] << 24) \
+            | ((z[i+1] if i+1 < sz else 0) << 16) \
+            | ((z[i+2] if i+2 < sz else 0) << 8) \
+            | (z[i+3] if i+3 < sz else 0)
 
-        out[j+0] = ENCODE_B85[acc // 52200625]
-        out[j+1] = ENCODE_B85[(acc // 614125) % 85]
-        out[j+2] = ENCODE_B85[(acc // 7225) % 85]
-        out[j+3] = ENCODE_B85[(acc // 85) % 85]
-        out[j+4] = ENCODE_B85[acc % 85]
+        o[j+0] = ENCODE_B85[acc // 52200625]
+        o[j+1] = ENCODE_B85[(acc // 614125) % 85]
+        o[j+2] = ENCODE_B85[(acc // 7225) % 85]
+        o[j+3] = ENCODE_B85[(acc // 85) % 85]
+        o[j+4] = ENCODE_B85[acc % 85]
         j += 5
 
     return bytes(out)
