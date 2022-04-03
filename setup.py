@@ -3,7 +3,7 @@ from Cython.Build import cythonize
 
 setup(
     name='cb85',
-    version='0.0.1',
+    version='0.0.2',
     packages=find_packages(),
     author='Karl Sundequist Blomdahl',
     author_email='karl.sundequist.blomdahl@gmail.com',
