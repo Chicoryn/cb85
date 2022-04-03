@@ -12,6 +12,8 @@ cdef unsigned char *DECODE_B85 = [
 cpdef bytes b85decode(bytes x):
     cdef int sz = len(x)
     cdef bytearray out = bytearray(4 * sz // 5)
+    cdef unsigned char *z = x
+    cdef unsigned char *o = out
     cdef unsigned int acc, de
     cdef int i, j
     cdef int k = 0
@@ -21,15 +23,15 @@ cpdef bytes b85decode(bytes x):
 
         for j in range(5):
             if i + j < sz:
-                de = DECODE_B85[x[i+j]]
+                de = DECODE_B85[z[i+j]]
                 acc = 85 * acc + de
             else:
                 break
 
-        out[k+0] = (acc >> 24) & 0xff
-        out[k+1] = (acc >> 16) & 0xff
-        out[k+2] = (acc >>  8) & 0xff
-        out[k+3] =  acc        & 0xff
+        o[k+0] = (acc >> 24) & 0xff
+        o[k+1] = (acc >> 16) & 0xff
+        o[k+2] = (acc >>  8) & 0xff
+        o[k+3] =  acc        & 0xff
         k += 4
 
     return bytes(out)
