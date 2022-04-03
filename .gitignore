@@ -1,6 +1,7 @@
 /build
 /cb85.egg-info
 /dist
+/wheelhouse
 **/__pycache__
 **/*.c
 **/*.so
