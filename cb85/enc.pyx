@@ -27,7 +27,7 @@ cpdef bytes b85encode(bytes x):
     cdef int j = 0
     cdef int i
 
-    for i in range(0, len(x), 4):
+    for i in range(0, sz, 4):
         acc = (z[i+0] << 24) \
             | ((z[i+1] if i+1 < sz else 0) << 16) \
             | ((z[i+2] if i+2 < sz else 0) << 8) \
